@@ -14,5 +14,5 @@ app.get('*', function (req, res) {
 });
 
 app.listen(3002, function () {
-  console.log('App started at http://localhost:3000/'); // eslint-disable-line no-console
+  console.log('App started at http://localhost:3002/'); // eslint-disable-line no-console
 });

@@ -1,5 +1,5 @@
 {
-  "name": "D3 Flat File CMS",
+  "name": "D3-FlatFile-CMS",
   "version": "0.1.0",
   "description": "Rollup es6 compatible packager minimal build processes flat files to D3 heirarchical visualisation",
   "main": "build/js/main.min.js",
