@@ -1,0 +1,47 @@
+{
+  "name": "D3 Flat File CMS",
+  "version": "0.1.0",
+  "description": "Rollup es6 compatible packager minimal build processes flat files to D3 heirarchical visualisation",
+  "main": "build/js/main.min.js",
+  "scripts": {
+    "build": "rollup -c config/rollup.config.js",
+    "dev": "rollup -c config/rollup.config.js --watch",
+    "reload": "livereload 'build/'",
+    "start": "rollup -c config/rollup.server.config.js && node server/app.js",
+    "watch": "npm-run-all --parallel reload dev start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mfallon/d3-flatfile-cms.git"
+  },
+  "author": "Mark Fallon<markfallondub@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mfallon/d3-flatfile-cms/issues"
+  },
+  "homepage": "https://github.com/mfallon/d3-flatfile-cms#readme",
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "cssnano": "^3.9.1",
+    "livereload": "^0.6.0",
+    "npm-run-all": "^3.1.2",
+    "postcss-cssnext": "^2.9.0",
+    "postcss-nested": "^1.0.0",
+    "postcss-simple-vars": "^3.0.0",
+    "rollup": "^0.39.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-postcss": "^0.2.0",
+    "rollup-plugin-replace": "^1.1.1",
+    "rollup-plugin-uglify": "^1.0.1",
+    "rollup-watch": "^3.0.0"
+  },
+  "dependencies": {
+    "debug": "^2.6.0",
+    "express": "^4.14.0",
+    "hbs": "^4.0.1"
+  }
+}
