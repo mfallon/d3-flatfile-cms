@@ -30,4 +30,7 @@ const printTarget = document.getElementsByClassName('debug__output')[0];
 const tree = new NodeTree();
 log(tree.hello());
 
+const CONTENTVAR = null;
+
 printTarget.innerText = `Output: ${tree.hello()}`;
+printTarget.innerText += `VARNAME: ${CONTENTVAR}`;

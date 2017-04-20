@@ -13,7 +13,12 @@ import nested from 'postcss-nested';
 import cssnext from 'postcss-cssnext';
 import cssnano from 'cssnano';
 
+// Import app config here
+import config from './app.config';
+
 // TODO: run tasks to process files here
+import build from '../scripts/build';
+// potentially use build to output a varname to use
 
 export default {
   entry: 'src/js/main.js',
@@ -47,6 +52,7 @@ export default {
     replace({
       exclude: 'node_modules/**',
       ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+      CONTENTVAR: config.content.varname
     }),
     (process.env.NODE_ENV === 'production' && uglify()),
   ],
