@@ -1,3 +1,4 @@
+import Node from './Node';
 /**
  * represent our files in a heirarchical manner
  */

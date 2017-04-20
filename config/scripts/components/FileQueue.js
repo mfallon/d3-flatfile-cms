@@ -1,7 +1,7 @@
 /**
  * Queue implementation which will notify when all promises are resolved
  */
-class FileQueue {
+export default class FileQueue {
   constructor() {
     this.fs = require('fs');
     this.tasks = [];

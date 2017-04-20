@@ -17,8 +17,15 @@ import cssnano from 'cssnano';
 import config from './app.config';
 
 // TODO: run tasks to process files here
-import build from '../scripts/build';
 // potentially use build to output a varname to use
+// portential blocking process here. what about promises?
+import { build } from './scripts/build';
+// postcss injects into the index file, can't we do the same for json content?
+build('./content').then(result => {
+  console.log(JSON.stringify(result));
+}).catch(error => {
+  console.log(`promise returned ${error}`);
+});
 
 export default {
   entry: 'src/js/main.js',
@@ -51,8 +58,7 @@ export default {
     }),
     replace({
       exclude: 'node_modules/**',
-      ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-      CONTENTVAR: config.content.varname
+      ENV: JSON.stringify(process.env.NODE_ENV || 'development')
     }),
     (process.env.NODE_ENV === 'production' && uglify()),
   ],
