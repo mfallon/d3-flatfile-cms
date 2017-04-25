@@ -107,10 +107,8 @@ export const build = (path) => {
               content
             });
           });
-          print('Finished compiling files!', 'confirm');
           resolve(tree.toJSON());
         } else {
-          print('no files to process!', 'warn');
           reject('error');
         }
       });

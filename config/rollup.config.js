@@ -6,6 +6,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
 import uglify from 'rollup-plugin-uglify';
 import postcss from 'rollup-plugin-postcss';
+import json from 'rollup-plugin-json';
 
 // PostCSS plugins
 import simplevars from 'postcss-simple-vars';
@@ -13,18 +14,13 @@ import nested from 'postcss-nested';
 import cssnext from 'postcss-cssnext';
 import cssnano from 'cssnano';
 
-// Import app config here
-import config from './app.config';
-
-// TODO: run tasks to process files here
-// potentially use build to output a varname to use
-// portential blocking process here. what about promises?
+// content processing imports
+import jsonfile from 'jsonfile';
 import { build } from './scripts/build';
-// postcss injects into the index file, can't we do the same for json content?
 build('./content').then(result => {
-  console.log(JSON.stringify(result));
-}).catch(error => {
-  console.log(`promise returned ${error}`);
+  jsonfile.writeFileSync('./src/js/content.json', result);
+}).catch(err => {
+  console.log(`promise returned ${err}`, ' - no files to process?');
 });
 
 export default {
@@ -54,11 +50,19 @@ export default {
       ]
     }),
     babel({
-      exclude: 'node_modules/**',
+      exclude: [
+        'node_modules/**',
+        'src/js/*.json'
+      ]
     }),
     replace({
       exclude: 'node_modules/**',
       ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+    }),
+    json({
+      include: 'src/**',
+      exclude: 'node_modules/**',
+      preferConst: true
     }),
     (process.env.NODE_ENV === 'production' && uglify()),
   ],

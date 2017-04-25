@@ -24,6 +24,7 @@
   "devDependencies": {
     "babel-preset-es2015-rollup": "^3.0.0",
     "cssnano": "^3.9.1",
+    "jsonfile": "^2.4.0",
     "livereload": "^0.6.0",
     "npm-run-all": "^3.1.2",
     "postcss-cssnext": "^2.9.0",
@@ -33,6 +34,7 @@
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^7.0.0",
     "rollup-plugin-eslint": "^3.0.0",
+    "rollup-plugin-json": "^2.1.1",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-postcss": "^0.2.0",
     "rollup-plugin-replace": "^1.1.1",

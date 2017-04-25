@@ -1,3 +1,4 @@
+import content from './content.json';
 // Import styles (automatically injected into <head>).
 import '../styles/main.css';
 
@@ -31,7 +32,7 @@ const tree = new NodeTree();
 log(tree.hello());
 
 // TODO: somehow stuff this variable with output from build
-const json = null;
 
 printTarget.innerText = `Output: ${tree.hello()}`;
-printTarget.innerText += `VARNAME: ${json}`;
+printTarget.innerText += `\nRootNode: ${content.name}`;
+printTarget.innerText += `\nChildren: ${content.children.length}`;
