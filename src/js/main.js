@@ -28,7 +28,7 @@ if (ENV !== 'production') {
 // Print the results on the page.
 const printTarget = document.getElementsByClassName('debug__output')[0];
 
-const tree = new NodeTree();
+const tree = new NodeTree(content);
 log(tree.hello());
 
 // TODO: somehow stuff this variable with output from build
