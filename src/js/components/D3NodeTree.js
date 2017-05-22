@@ -18,56 +18,25 @@ const d3 = d3Lib.__moduleExports;
 // TODO: this works:
 // import { hierarchy } from 'd3-hierarchy';
 
-import debug from 'debug';
-const log = debug('app:log');
+import D3Component from './D3Component';
 
-export default class NodeTree {
+export default class D3NodeTree extends D3Component {
 
-  constructor(json = null) {
-    if (ENV !== 'production') {
-      log(`D3 v${d3.version} loaded`);
-    }
+  constructor(canvas, json = null) {
+    super();
+    this.svg = super.setupCanvas(canvas);
 
-    const margin = {top: 20, right: 220, bottom: 20, left: 60};
-    const bounds = {
-      width: 1024 - margin.left - margin.right,
-      height: 2000 - margin.top - margin.bottom
-    };
-
-    this.root = d3.hierarchy(json, d => d.children);
-    this.root.x0 = bounds.height / 2;
+    // TODO: replace with hierarchy import
+    this.root = this.d3.hierarchy(json, d => d.children);
+    this.root.x0 = canvas.bounds[1] / 2;
     this.root.y0 = 0;
 
-    this.canvas = this.setupCanvas(bounds, margin);
-    this.tree = d3.tree()
-      .size([bounds.height, bounds.width]);
+    this.tree = this.d3.tree()
+      .size([canvas.bounds[1], canvas.bounds[0]]);
 
-    // this.drawTree();
-
-    // Collapse all but first 3
-    const collapse = d => {
-      if (d.children) {
-        d._children = d.children;
-        d._children.forEach(collapse);
-        d.children = null;
-      }
-    };
-    this.root.children.forEach(collapse);
+    this.root.children.forEach(this.collapse, this);
 
     this.update(this.root);
-  }
-
-  hello() {
-    return `Hello ${this.root.children.length}`;
-  }
-
-  setupCanvas(bounds, margin) {
-    const svg = d3.select(document.body).append('svg')
-      .attr('width', bounds.width + margin.right + margin.left)
-      .attr('height', bounds.height + margin.top + margin.bottom);
-
-    return svg.append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
   }
 
   // creates a curved diagonal path from parent to the child node
@@ -78,19 +47,31 @@ export default class NodeTree {
             ${(s.y + d.y) / 2} ${d.x},
             ${d.y} ${d.x}`;
     */
+
     return `M${d.y},${d.x}C${((d.y + d.parent.y)/2)},${d.x} ${((d.y + d.parent.y)/2)},${d.parent.x} ${d.parent.y},${d.parent.x}`;
+
+  }
+
+  // TODO: can't refer to this when passed to forEach
+  collapse(d) {
+    if (d.children) {
+      d._children = d.children;
+      d._children.forEach(this.collapse, this);
+      d.children = null;
+    }
+  };
 
 
   drawTree() {
     // Link
-    let link = this.canvas.selectAll('.link')
+    let link = this.svg.selectAll('.link')
       .data(this.tree(this.root).descendants().slice(1))
       .enter().append('path')
       .attr('class', 'link')
       .attr('d', d => `M${d.y},${d.x}C${((d.y + d.parent.y)/2)},${d.x} ${((d.y + d.parent.y)/2)},${d.parent.x} ${d.parent.y},${d.parent.x}`);
 
     // Node
-    let node = this.canvas.selectAll('node')
+    let node = this.svg.selectAll('node')
       .data(this.root.descendants())
       .enter().append('g')
       .attr('class', d => (`node${(d.children ? ' node--internal' : ' node--leaf')}`))
@@ -131,7 +112,7 @@ export default class NodeTree {
     });
 
     // update the nodes
-    let node = this.canvas.selectAll('g.node')
+    let node = this.svg.selectAll('g.node')
       .data(nodes, d => ( d.id || (d.id = ++i)));
 
     // enter any new nodes at parent's previous position
@@ -139,7 +120,6 @@ export default class NodeTree {
       .attr('class', 'node')
       .attr('transform', d => `translate(${source.y0},${source.x0})`)
       .on('click', d => {
-        log('node clicked: ', d.data.name);
         if (d.children) {
           d._children = d.children;
           d.children = null;
@@ -188,7 +168,7 @@ export default class NodeTree {
     nodeExit.select('text')
       .style('fill-opacity', 1e-6);
 
-    let link = this.canvas.selectAll('path.link')
+    let link = this.svg.selectAll('path.link')
       .data(links, d => d.id);
 
     let linkEnter = link.enter().insert('path', 'g')

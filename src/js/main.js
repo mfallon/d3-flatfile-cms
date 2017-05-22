@@ -3,7 +3,7 @@ import content from './content.json';
 import '../styles/main.css';
 
 // Import a couple modules for testing.
-import NodeTree from './components/NodeTree';
+import D3NodeTree from './components/D3NodeTree';
 
 // Import a logger for easier debugging.
 import debug from 'debug';
@@ -27,12 +27,14 @@ if (ENV !== 'production') {
 
 // Print the results on the page.
 const printTarget = document.getElementsByClassName('debug__output')[0];
-
-const tree = new NodeTree(content);
-log(tree.hello());
-
 // TODO: somehow stuff this variable with output from build
-
-printTarget.innerText = `Output: ${tree.hello()}`;
-printTarget.innerText += `\nRootNode: ${content.name}`;
+printTarget.innerText = `\nRootNode: ${content.name}`;
 printTarget.innerText += `\nChildren: ${content.children.length}`;
+
+const canvas = {
+  bounds: [1024, 1000],
+  margin: [20, 220, 20, 60]
+};
+
+// eslint-disable-next-line
+const tree = new D3NodeTree(canvas, content);
