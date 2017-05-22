@@ -42,7 +42,6 @@
     "rollup-watch": "^3.0.0"
   },
   "dependencies": {
-    "d3": "^4.9.1",
     "debug": "^2.6.0",
     "express": "^4.14.0",
     "hbs": "^4.0.1"
