@@ -1,9 +1,3 @@
-// TODO: implement our class to represent the D3 Node Tree
-// 1. Use JSON data generated from build
-// 2. import D3 lib as node module
-// 3. Generate D3 Hierarchy from JSON data
-// 4. Output visual of hierarchy
-
 /* eslint-disable */
 
 /**
@@ -11,12 +5,6 @@
  * @param  {type}
  * @return {type}
  */
-
-import * as d3Lib from 'd3';
-// TODO: imports not working as expected
-const d3 = d3Lib.__moduleExports;
-// TODO: this works:
-// import { hierarchy } from 'd3-hierarchy';
 
 import D3Component from './D3Component';
 
@@ -39,20 +27,15 @@ export default class D3NodeTree extends D3Component {
     this.update(this.root);
   }
 
-  // creates a curved diagonal path from parent to the child node
-  diagonal(d) {
-    /*
+  // Creates a curved (diagonal) path from parent to the child nodes
+  drawDiagonal(s, d) {
     return `M ${s.y} ${s.x}
             C ${(s.y + d.y) / 2} ${s.x},
             ${(s.y + d.y) / 2} ${d.x},
             ${d.y} ${d.x}`;
-    */
-
-    return `M${d.y},${d.x}C${((d.y + d.parent.y)/2)},${d.x} ${((d.y + d.parent.y)/2)},${d.parent.x} ${d.parent.y},${d.parent.x}`;
-
   }
 
-  // TODO: can't refer to this when passed to forEach
+  // Collapse passed in node plus it's children
   collapse(d) {
     if (d.children) {
       d._children = d.children;
@@ -61,41 +44,18 @@ export default class D3NodeTree extends D3Component {
     }
   };
 
-
-  drawTree() {
-    // Link
-    let link = this.svg.selectAll('.link')
-      .data(this.tree(this.root).descendants().slice(1))
-      .enter().append('path')
-      .attr('class', 'link')
-      .attr('d', d => `M${d.y},${d.x}C${((d.y + d.parent.y)/2)},${d.x} ${((d.y + d.parent.y)/2)},${d.parent.x} ${d.parent.y},${d.parent.x}`);
-
-    // Node
-    let node = this.svg.selectAll('node')
-      .data(this.root.descendants())
-      .enter().append('g')
-      .attr('class', d => (`node${(d.children ? ' node--internal' : ' node--leaf')}`))
-      .attr('transform', d => `translate(${d.y},${d.x})`);
-    node.append('circle')
-      .attr('r', 5);
-
-    // Text Node
-    node.append('text')
-      .attr('dy', 3)
-      .attr('x', d => (d.children ? -8 : 8))
-      .style('text-anchor', d => (d.children ? 'end' : 'start'))
-      .text(d => (d.data.name ? d.data.name : 'node'));
-
-    const collapse = d => {
-      if (d.children) {
-        d._children = d.children;
-        d._children.forEach(collapse);
-        d.children = null;
-      }
-    };
-
+  nodeClick(d) {
+    if (d.children) {
+      d._children = d.children;
+      d.children = null;
+    } else {
+      d.children = d._children;
+      d._children = null;
+    }
+    this.update(d);
   }
 
+  // main draw function, invoked multiple times
   update(source) {
     let treeData = this.tree(this.root);
 
@@ -120,14 +80,7 @@ export default class D3NodeTree extends D3Component {
       .attr('class', 'node')
       .attr('transform', d => `translate(${source.y0},${source.x0})`)
       .on('click', d => {
-        if (d.children) {
-          d._children = d.children;
-          d.children = null;
-        } else {
-          d.children = d._children;
-          d._children = null;
-        }
-        this.update(d);
+        this.nodeClick(d)
       });
 
     nodeEnter.append('circle')
@@ -175,20 +128,20 @@ export default class D3NodeTree extends D3Component {
       .attr('class', 'link')
       .attr('d', d => {
         let o = {x: source.x0, y: source.y0};
-        return this.diagonal(o, o);
+        return this.drawDiagonal(o, o);
       });
 
     let linkUpdate = linkEnter.merge(link);
 
     linkUpdate.transition()
       .duration(duration)
-      .attr('d', d => this.diagonal(d, d.parent));
+      .attr('d', d => this.drawDiagonal(d, d.parent));
 
     let linkExit = link.exit().transition()
       .duration(duration)
       .attr('d', d => {
         let o = {x: source.x, y: source.y};
-        return this.diagonal(o, o);
+        return this.drawDiagonal(o, o);
       })
       .remove();
 

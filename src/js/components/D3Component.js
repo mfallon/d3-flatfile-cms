@@ -16,6 +16,7 @@ export default class D3Component {
       .attr('transform', `translate(${canvas.margin[3]}, ${canvas.margin[0]})`);
   }
 
+
   // const getCanvasBounds = () => this.
 
 }
