@@ -32,8 +32,8 @@ printTarget.innerText = `\nRootNode: ${content.name}`;
 printTarget.innerText += `\nChildren: ${content.children.length}`;
 
 const canvas = {
-  bounds: [1024, 1000],
-  margin: [20, 220, 20, 60]
+  bounds: [1000, 1000],
+  margin: [10, 120, 10, 20]
 };
 
 // eslint-disable-next-line

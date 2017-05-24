@@ -44,15 +44,30 @@ export default class D3NodeTree extends D3Component {
     }
   };
 
+  // TODO: you will not want to trigger an update when a leaf node
   nodeClick(d) {
-    if (d.children) {
-      d._children = d.children;
-      d.children = null;
-    } else {
-      d.children = d._children;
-      d._children = null;
+    // TODO: we should load any content on this node I guess
+    if (d.data && d.data.props) {
+      let content = JSON.parse(d.data.props.content);
+      if (content.length) {
+        let contentDiv = this.d3.select('div')
+          .html(
+            this.marked(content)
+          );
+      }
     }
-    this.update(d);
+    if (d.hasOwnProperty('children')) {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      this.update(d);
+    } else {
+      // leaf node
+    }
   }
 
   // main draw function, invoked multiple times

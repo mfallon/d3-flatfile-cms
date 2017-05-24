@@ -1,11 +1,13 @@
 /* eslint-disable */
 import * as d3Lib from 'd3';
+import * as markedLib from 'marked';
 
 export default class D3Component {
 
   constructor() {
     // TODO: work out why this is needed 
     this.d3 = d3Lib.__moduleExports;
+    this.marked = markedLib.__moduleExports;
   }
 
   setupCanvas(canvas) {
