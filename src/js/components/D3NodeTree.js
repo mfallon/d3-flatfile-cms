@@ -18,6 +18,8 @@ export default class D3NodeTree extends D3Component {
     this.root = this.d3.hierarchy(json, d => d.children);
     this.root.x0 = canvas.bounds[1] / 2;
     this.root.y0 = 0;
+    this.i = 0;
+    this.duration = 750;
 
     this.tree = this.d3.tree()
       .size([canvas.bounds[1], canvas.bounds[0]]);
@@ -44,9 +46,7 @@ export default class D3NodeTree extends D3Component {
     }
   };
 
-  // TODO: you will not want to trigger an update when a leaf node
   nodeClick(d) {
-    // TODO: we should load any content on this node I guess
     if (d.data && d.data.props) {
       let content = JSON.parse(d.data.props.content);
       if (content.length) {
@@ -78,9 +78,6 @@ export default class D3NodeTree extends D3Component {
     let nodes = treeData.descendants(),
       links = treeData.descendants().slice(1);
 
-    let i = 0,
-      duration = 750;
-
     // normalize for fixed depth
     nodes.forEach(d => {
       d.y = d.depth * 180;
@@ -88,7 +85,7 @@ export default class D3NodeTree extends D3Component {
 
     // update the nodes
     let node = this.svg.selectAll('g.node')
-      .data(nodes, d => ( d.id || (d.id = ++i)));
+      .data(nodes, d => ( d.id || (d.id = ++this.i)));
 
     // enter any new nodes at parent's previous position
     let nodeEnter = node.enter().append('g')
@@ -113,7 +110,7 @@ export default class D3NodeTree extends D3Component {
     let nodeUpdate = nodeEnter.merge(node);
     
     nodeUpdate.transition()
-      .duration(duration)
+      .duration(this.duration)
       .attr('transform', d => `translate(${d.y},${d.x})`);
 
     nodeUpdate.select('circle.node')
@@ -126,7 +123,7 @@ export default class D3NodeTree extends D3Component {
 
     // Transition exiting nodes to parents new position
     let nodeExit = node.exit().transition()
-      .duration(duration)
+      .duration(this.duration)
       .attr('transform', d => `translate(${source.y},${source.x})`)
       .remove();
 
@@ -149,11 +146,11 @@ export default class D3NodeTree extends D3Component {
     let linkUpdate = linkEnter.merge(link);
 
     linkUpdate.transition()
-      .duration(duration)
+      .duration(this.duration)
       .attr('d', d => this.drawDiagonal(d, d.parent));
 
     let linkExit = link.exit().transition()
-      .duration(duration)
+      .duration(this.duration)
       .attr('d', d => {
         let o = {x: source.x, y: source.y};
         return this.drawDiagonal(o, o);
