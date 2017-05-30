@@ -12,7 +12,15 @@ export default class D3NodeTree extends D3Component {
 
   constructor(canvas, json = null) {
     super();
-    this.svg = super.setupCanvas(canvas);
+    const { bounds, margin, elements } = canvas;
+    const [ treeTgtElement, contentTgtElement ] = elements;
+    this.contentTgtElement = contentTgtElement;
+
+    this.svg = super.setupCanvas({
+      bounds,
+      margin,
+      element: treeTgtElement
+    });
 
     // TODO: replace with hierarchy import
     this.root = this.d3.hierarchy(json, d => d.children);
@@ -50,7 +58,7 @@ export default class D3NodeTree extends D3Component {
     if (d.data && d.data.props) {
       let content = JSON.parse(d.data.props.content);
       if (content.length) {
-        let contentDiv = this.d3.select('div')
+        let contentDiv = this.d3.select(this.contentTgtElement)
           .html(
             this.marked(content)
           );

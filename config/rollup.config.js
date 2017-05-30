@@ -23,6 +23,23 @@ build('./content').then(result => {
   console.log(`promise returned ${err}`, ' - no files to process?');
 });
 
+// will dev here but should belong to build script 
+const fs = require('fs');
+fs.createReadStream(`./src/index.html`)
+  .pipe(fs.createWriteStream(`./build/index.html`));
+/*
+const indexLoader = new Promise((resolve, reject) => {
+  let file = fs.createReadStream('./src/index.html');
+  // when loaded event happens
+  file.then();
+});
+
+indexLoader.load().then(
+  console.log('index loaded!');
+);
+*/
+
+
 export default {
   entry: 'src/js/main.js',
   dest: 'build/js/main.min.js',

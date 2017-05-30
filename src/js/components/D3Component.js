@@ -11,15 +11,15 @@ export default class D3Component {
   }
 
   setupCanvas(canvas) {
-    return this.d3.select(document.body).append('svg')
-      .attr('width', canvas.bounds[0])
-      .attr('height', canvas.bounds[1])
+    // query for element if provided
+    const { element, bounds, margin } = canvas;
+    
+    return this.d3.select(element).append('svg')
+      .attr('width', bounds[0])
+      .attr('height', bounds[1])
       .append('g')
-      .attr('transform', `translate(${canvas.margin[3]}, ${canvas.margin[0]})`);
+      .attr('transform', `translate(${margin[3]}, ${margin[0]})`);
   }
-
-
-  // const getCanvasBounds = () => this.
 
 }
 /* eslint-enable */
