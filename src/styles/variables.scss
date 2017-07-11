@@ -1,0 +1,19 @@
+/* Variables */
+$palette: (
+  dark-purple: #55144E
+);
+
+$ui: (
+  border-color: map-get($palette, dark-purple)
+);
+
+/* below could be junk */
+$color-heading: #111;
+$color-text: #999;
+$color-gradient-start: #aaa;
+$color-lightest: #ccc;
+$font-family: sans-serif;
+
+/* themin */
+$color-border-dark: #55144E;
+

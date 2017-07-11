@@ -5,14 +5,8 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
 import uglify from 'rollup-plugin-uglify';
-import postcss from 'rollup-plugin-postcss';
 import json from 'rollup-plugin-json';
-
-// PostCSS plugins
-import simplevars from 'postcss-simple-vars';
-import nested from 'postcss-nested';
-import cssnext from 'postcss-cssnext';
-import cssnano from 'cssnano';
+import sass from 'rollup-plugin-sass';
 
 // content processing imports
 import jsonfile from 'jsonfile';
@@ -27,6 +21,7 @@ build('./content').then(result => {
 const fs = require('fs');
 fs.createReadStream(`./src/index.html`)
   .pipe(fs.createWriteStream(`./build/index.html`));
+
 /*
 const indexLoader = new Promise((resolve, reject) => {
   let file = fs.createReadStream('./src/index.html');
@@ -39,21 +34,14 @@ indexLoader.load().then(
 );
 */
 
-
 export default {
   entry: 'src/js/main.js',
   dest: 'build/js/main.min.js',
   format: 'iife',
   sourceMap: 'inline',
   plugins: [
-    postcss({
-      plugins: [
-        simplevars(),
-        nested(),
-        cssnext({ warnForDuplicates: false, }),
-        cssnano(),
-      ],
-      extensions: [ '.css' ],
+    sass({
+      output: 'build/css/main.css'
     }),
     resolve({
       jsnext: true,

@@ -1,0 +1,12 @@
+/* our main UI theme */
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+/* some mapping to foundation styles */
+.top-bar {
+  &.theme {
+    border-bottom: 10px solid map-get($ui, border-color);
+  }
+}

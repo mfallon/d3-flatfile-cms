@@ -1,0 +1,25 @@
+/* d3 NodeTree */
+svg {
+  .link {
+    fill: none;
+    stroke: rgba(100, 100, 100, 0.2);
+    stroke-width: 1.0px;
+  }
+  .node {
+    cursor: pointer;
+    circle {
+      fill: rgba(100, 100, 100, 0.2);
+      stroke: rgba(100, 100, 100, 0.4);
+      stroke-width: 1px;
+    }
+    text {
+      font-family: $font-family;
+      font-weight: Regular;
+      font-size: 14px;
+      letter-spacing: 0.8px;
+      fill: $color-text;
+    }
+  }
+
+}
+

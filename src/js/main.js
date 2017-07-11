@@ -1,6 +1,6 @@
 import content from './content.json';
-// Import styles (automatically injected into <head>).
-import '../styles/main.css';
+// our main entry point for scss
+import '../styles/main.scss';
 
 // Import a couple modules for testing.
 import D3NodeTree from './components/D3NodeTree';
@@ -25,14 +25,6 @@ if (ENV !== 'production') {
 } else {
   debug.disable();
 }
-
-// Print the results on the page.
-/*
-const printTarget = document.getElementsByClassName('debug__output')[0];
-// TODO: somehow stuff this variable with output from build
-printTarget.innerText = `\nRootNode: ${content.name}`;
-printTarget.innerText += `\nChildren: ${content.children.length}`;
-*/
 
 Split(['#left-pane', '#right-pane'], {
   sizes: [80, 20],
